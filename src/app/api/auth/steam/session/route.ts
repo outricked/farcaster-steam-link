@@ -4,7 +4,7 @@ import { URLSearchParams } from 'url'; // Keep Node.js URLSearchParams for build
 
 const STEAM_OPENID_URL = 'https://steamcommunity.com/openid/login';
 const COOKIE_NAME = 'steamSession'; // Define cookie name
-const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'; // Get base URL for redirect
+const baseUrl = process.env.NEXT_PUBLIC_URL || 'http://localhost:3000'; // Get base URL for redirect
 
 // Handle GET request from Steam callback
 export async function GET(request: NextRequest) {
