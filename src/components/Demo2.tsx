@@ -33,7 +33,13 @@ export function Demo2() {
       'openid.claimed_id': 'http://specs.openid.net/auth/2.0/identifier_select',
     };
     const steamLoginUrl = `https://steamcommunity.com/openid/login?${new URLSearchParams(loginParams).toString()}`;
-    window.location.href = steamLoginUrl;
+    // Navigate the top-level window to break out of the iframe
+    // Fallback to window.location if window.top is null (unlikely in this context)
+    if (window.top) {
+      window.top.location.href = steamLoginUrl;
+    } else {
+      window.location.href = steamLoginUrl;
+    }
   };
 
   //check cookies
