@@ -1,7 +1,7 @@
-import localtunnel from 'localtunnel';
 import { spawn } from 'child_process';
-import { createServer } from 'net';
 import dotenv from 'dotenv';
+import localtunnel from 'localtunnel';
+import { createServer } from 'net';
 import path from 'path';
 import { fileURLToPath } from 'url';
 
@@ -67,8 +67,12 @@ async function killProcessOnPort(port) {
 }
 
 async function startDev() {
+  console.log("Starting dev script...");
+
   // Check if port 3000 is already in use
+  console.log("Checking port 3000...");
   const isPortInUse = await checkPort(3000);
+  console.log(`Port 3000 in use: ${isPortInUse}`);
   if (isPortInUse) {
     console.error('Port 3000 is already in use. To find and kill the process using this port:\n\n' +
       (process.platform === 'win32' 
@@ -87,10 +91,14 @@ async function startDev() {
 
   if (useTunnel) {
     // Start localtunnel and get URL
+    console.log("Starting localtunnel...");
     tunnel = await localtunnel({ port: 3000 });
+    console.log("Localtunnel started.");
     let ip;
     try {
+      console.log("Fetching IP address...");
       ip = await fetch('https://ipv4.icanhazip.com').then(res => res.text()).then(ip => ip.trim());
+      console.log(`IP address fetched: ${ip}`);
     } catch (error) {
       console.error('Error getting IP address:', error);
     }
@@ -134,6 +142,7 @@ async function startDev() {
     ? path.join(projectRoot, 'node_modules', '.bin', 'next.cmd')
     : path.join(projectRoot, 'node_modules', '.bin', 'next');
 
+  console.log(`Spawning next dev process using: ${nextBin}`);
   nextDev = spawn(nextBin, ['dev'], {
     stdio: 'inherit',
     env: { ...process.env, NEXT_PUBLIC_URL: frameUrl, NEXTAUTH_URL: frameUrl },
@@ -195,4 +204,5 @@ async function startDev() {
   }
 }
 
+console.log("Running startDev...");
 startDev().catch(console.error); 
