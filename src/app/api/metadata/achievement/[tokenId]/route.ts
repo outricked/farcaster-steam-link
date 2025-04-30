@@ -42,9 +42,9 @@ async function getAchievementDetails(tokenId: string): Promise<AchievementMetada
 
 export async function GET(
     request: NextRequest, // Use NextRequest for App Router
-    { params }: { params: { tokenId: string } }
+    { params }: { params: Promise<{ tokenId: string }> }
 ) {
-    const { tokenId } = params;
+    const { tokenId } = await params;
 
     if (!tokenId) {
         return NextResponse.json({ error: 'Token ID is required' }, { status: 400 });
