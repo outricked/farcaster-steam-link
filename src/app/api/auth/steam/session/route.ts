@@ -29,7 +29,8 @@ export async function GET(request: NextRequest) {
     // Append all parameters received from Steam to the verification request
     // Steam expects all params prefixed with 'openid.'
     searchParams.forEach((value, key) => {
-      if (key.startsWith('openid.')) {
+      // Skip ns and mode as they are already set or will be overridden
+      if (key.startsWith('openid.') && key !== 'openid.ns' && key !== 'openid.mode') {
         verificationParams.append(key, value);
       }
     });
