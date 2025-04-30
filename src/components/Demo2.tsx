@@ -33,12 +33,16 @@ export function Demo2() {
       'openid.claimed_id': 'http://specs.openid.net/auth/2.0/identifier_select',
     };
     const steamLoginUrl = `https://steamcommunity.com/openid/login?${new URLSearchParams(loginParams).toString()}`;
-    // Navigate the top-level window to break out of the iframe
-    // Fallback to window.location if window.top is null (unlikely in this context)
-    if (window.top) {
-      window.top.location.href = steamLoginUrl;
-    } else {
+
+    // Detect if running on a mobile device
+    const isMobile = /Mobi/i.test(navigator.userAgent);
+
+    if (isMobile) {
+      // On mobile, navigate the current window/frame
       window.location.href = steamLoginUrl;
+    } else {
+      // On non-mobile (likely web/desktop, potentially framed), open in a new tab
+      window.open(steamLoginUrl, '_blank', 'noopener,noreferrer');
     }
   };
 
